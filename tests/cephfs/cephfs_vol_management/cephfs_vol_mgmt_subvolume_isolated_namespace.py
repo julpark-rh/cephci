@@ -43,7 +43,7 @@ def run(ceph_cluster, **kw):
             sudo=True, cmd=f"ceph fs subvolume info cephfs {subvol_name}"
         )
         isolated_pool_name = f"fsvolumens_{subvol_name}"
-        output1 = json.loads(out1.read().decode())
+        output1 = json.loads(out1)
         target_ns_name = output1["pool_namespace"]
         if target_ns_name != isolated_pool_name:
             log.error("Isolated namespace name are not identical")

@@ -35,10 +35,10 @@ def run(ceph_cluster, **kw):
             validate=False,
             check_ec=False,
         )
-        if c_err:
-            return 0
-        return 1
+        if c_out == 0:
+            return 1
+        return 0
     except Exception as e:
-        log.info(e)
-        log.info(traceback.format_exc())
+        log.error(e)
+        log.error(traceback.format_exc())
         return 1
