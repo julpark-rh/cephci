@@ -13,7 +13,7 @@ def run(ceph_cluster, **kw):
     """
     Test steps:
     1. Client 1 with read write and execute permissions on directory 1
-    2. Client1 should not write date in directory 2
+    2. Client1 should not write data in directory 2
     3. Client 1 with read for directory 2
     4. Client 1 should write data in first directory 1
     5. Client 2 with read only permissions on directory 1
