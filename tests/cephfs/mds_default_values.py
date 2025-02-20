@@ -34,10 +34,16 @@ def run(ceph_cluster, **kw):
             return 1
         client1 = clients[0]
         host_list = [mds.node.hostname for mds in mds_list]
-        fs_name = "cephfs"
+        out, ec =client1.exec_command(
+                sudo=True, cmd="ceph fs ls | awk {' print $2'} "
+            )
+        fs_name = out.rstrip()
+        fs_name = fs_name.strip(",")
+        new_fs = "cephfs2"
+        fs_util.rename_volume(client1, fs_name, new_fs)
         for host in host_list:
             if not fs_util.wait_for_mds_deamon(
-                client=client1, process_name=fs_name, host=host
+                client=client1, process_name="cephfs", host=host
             ):
                 raise CommandFailed(f"Failed to start MDS on particular nodes {host}")
         return 0
@@ -45,3 +51,5 @@ def run(ceph_cluster, **kw):
         log.error(e)
         log.error(traceback.format_exc())
         return 1
+    finally:
+        fs_util.rename_volume(client1, new_fs, fs_name)
